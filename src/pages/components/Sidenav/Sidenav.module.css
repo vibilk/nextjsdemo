@@ -1,0 +1,10 @@
+.SidenavContainer{
+    position: fixed;
+    width: 250px;
+    background: #fff;
+    height: 100vh;
+}
+.LogoImg{
+    padding: 16px 0px;
+    text-align: center;
+}

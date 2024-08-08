@@ -1,0 +1,10 @@
+.Logincontainer{
+    background: #DAE7F9;
+    width: 470px;
+    margin: 0 auto;
+    padding: 40px 18px;
+}
+.FormInput{margin: 20px 0;width: 100%;}
+.MuiFormControlroot{
+    width: 100%;
+}
