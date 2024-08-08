@@ -13,16 +13,6 @@ const montserrat = Montserrat({
 
 export default function App({ Component, pageProps }: AppProps) {
 
-  const router = useRouter();
-
-  useEffect(() => {
-    const token = getCookie('authToken');
-    if (!token && router.pathname !== '/') {
-      router.push('/');
-    }
-  }, [router]);
-
-
   return (
     <main className={montserrat.className}>
       <Component {...pageProps} />

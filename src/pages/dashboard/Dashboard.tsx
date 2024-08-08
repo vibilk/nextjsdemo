@@ -95,7 +95,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!token) {
-      router.push('/'); // Redirect to login page if token is not present
+      router.push('/'); 
     }
   }, [router]);
 
