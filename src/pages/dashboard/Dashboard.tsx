@@ -2,8 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Sidenav from '../components/Sidenav/Sidenav'; // Importing the Sidenav component
 import styles from '@/styles/Home.module.css'; // Importing CSS module for styling
-import { Product } from './types'; // Importing the Product type
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography, CircularProgress } from '@mui/material'; // Importing MUI components
+
+
+
+export interface Product {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  tags: string[];
+  brand: string;
+}
+
 
 const Dashboard: React.FC = () => {
   // State variables for products, selected product, dialog open state, and loading state
