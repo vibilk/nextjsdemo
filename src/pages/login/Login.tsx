@@ -21,28 +21,25 @@ function Login() {
   // Handler function for form submission
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
-      // Send a POST request to the /api/login endpoint with form data
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data), // Send form data in the request body
+        body: JSON.stringify(data),
       });
-
-      // If the response is not ok, throw an error
+  
       if (!response.ok) {
         throw new Error('Login failed');
       }
-
-      // Parse the response data as JSON
+  
       const result = await response.json();
-      localStorage.setItem('authToken', result.token); // Store token in localStorage
-      router.push('/dashboard'); // Navigate to the dashboard page upon successful login
+      console.log('Login successful:', result); // Log the result for debugging
+      localStorage.setItem('authToken', result.token);
+      router.push('/dashboard');
     } catch (error) {
-      // Show an error toast notification if there is an error
       toast.error('Invalid username or password');
-      console.error('Invalid username or password');
+      console.error('Error during login:', error); // Log error details
     }
   };
 
