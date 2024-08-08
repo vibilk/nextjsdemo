@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import Sidenav from '../components/Sidenav/Sidenav'; // Importing the Sidenav component
-import styles from '@/styles/Home.module.css'; // Importing CSS module for styling
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography, CircularProgress } from '@mui/material'; // Importing MUI components
-
-
-
+import Sidenav from '../components/Sidenav/Sidenav';
+import styles from '@/styles/Home.module.css';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography, CircularProgress } from '@mui/material';
+import { useRouter } from 'next/router';
 export interface Product {
   id: number;
   title: string;
@@ -20,7 +18,10 @@ export interface Product {
 }
 
 
+
 const Dashboard: React.FC = () => {
+
+
   // State variables for products, selected product, dialog open state, and loading state
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -59,69 +60,78 @@ const Dashboard: React.FC = () => {
       try {
         const response = await fetch('https://dummyjson.com/products');
         const data = await response.json();
-        setProducts(data.products); // Set the fetched products to the state
+        setProducts(data.products);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     }
 
-    fetchProducts(); // Call the fetchProducts function
+    fetchProducts();
   }, []);
 
   // Function to handle viewing reviews of a product
   const handleViewReviews = async (productId: number) => {
-    setLoading(true); // Set loading state to true
-    setIsDialogOpen(true); // Open the dialog
+    setLoading(true);
+    setIsDialogOpen(true);
     try {
       const response = await fetch(`https://dummyjson.com/products/${productId}`);
       const product = await response.json();
-      setSelectedProduct(product); // Set the selected product to the state
+      setSelectedProduct(product);
     } catch (error) {
       console.error('Error fetching product details:', error);
     } finally {
-      setLoading(false); // Set loading state to false
+      setLoading(false);
     }
   };
 
   // Function to handle closing the dialog
   const handleCloseDialog = () => {
-    setIsDialogOpen(false); // Close the dialog
-    setSelectedProduct(null); // Clear the selected product
+    setIsDialogOpen(false);
+    setSelectedProduct(null);
   };
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      router.push('/'); // Redirect to login page if token is not present
+    }
+  }, [router]);
 
   return (
     <>
-      <Sidenav /> {/* Render the Sidenav component */}
-      <div className={styles.MainBody}> {/* Container div with a custom class for styling */}
-        <div className={styles.MainBodyContainer}> {/* Inner container div with a custom class for styling */}
-          <div style={{ height: 600, width: '100%' }}> {/* Container for the DataGrid with fixed height and width */}
-            <h2 className={styles.TableTitle}>Products</h2> {/* Table title */}
-            <DataGrid rows={products} columns={columns} /> {/* DataGrid with products and columns */}
+      <Sidenav />
+      <div className={styles.MainBody}>
+        <div className={styles.MainBodyContainer}>
+          <div style={{ height: 600, width: '100%' }}>
+            <h2 className={styles.TableTitle}>Products</h2>
+            <DataGrid rows={products} columns={columns} />
           </div>
         </div>
       </div>
-      <Dialog open={isDialogOpen} onClose={handleCloseDialog}> {/* Dialog for viewing product reviews */}
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Product Reviews</DialogTitle>
         <DialogContent>
           {loading ? (
-            <CircularProgress /> // Show loading spinner if loading state is true
+            <CircularProgress />
           ) : selectedProduct ? (
             <>
-              <Typography variant="h6">{selectedProduct.title}</Typography> {/* Display product title */}
-              <Typography variant="body1">{selectedProduct.description}</Typography> {/* Display product description */}
+              <Typography variant="h6">{selectedProduct.title}</Typography>
+              <Typography variant="body1">{selectedProduct.description}</Typography>
             </>
           ) : (
-            <Typography>No product selected</Typography> // Show message if no product is selected
+            <Typography>No product selected</Typography>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary"> {/* Close button */}
+          <Button onClick={handleCloseDialog} color="primary">
             Close
           </Button>
         </DialogActions>
       </Dialog>
     </>
   );
-}
+};
 
 export default Dashboard;
